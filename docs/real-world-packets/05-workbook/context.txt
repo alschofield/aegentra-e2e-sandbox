@@ -1,0 +1,4 @@
+The workbook contains synthetic checklist examples, not a new feature. It is a
+second representation of the same ready-title requirement. If spreadsheet contents
+cannot be extracted, say so explicitly. Don't pretend you inspected the cells, and
+don't create an Excel parser task unless the product owner requests that capability.
