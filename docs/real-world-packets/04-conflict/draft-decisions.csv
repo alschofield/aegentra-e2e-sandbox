@@ -1,0 +1,5 @@
+topic,option,stage,note
+priority ordering,higher number wins,draft,One person's suggestion
+priority ordering,lower number wins,approved baseline,Current product contract
+new paused status,allow paused,draft,Not yet agreed
+new paused status,reject unsupported status,approved baseline,Preserve current supported statuses
