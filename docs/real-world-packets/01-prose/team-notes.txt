@@ -1,0 +1,14 @@
+We've been looking at the task board during our standup. The counts are useful,
+but we still copy every ready task's title by hand to make a short checklist.
+That little bit is slowing us down. We want the same order as the board, and an
+empty list if there isn't anything ready. Don't include blocked, in-progress, or
+finished work in that checklist.
+
+The developer's interface can be listReadyTaskTitles(tasks), in a small standalone
+src/ready-task-titles.js module. Reuse the board's four supported statuses. Every
+row needs a nonempty string id and a string title. Reject a non-array board,
+non-object row, malformed id/title, or unsupported/non-string status with TypeError.
+Don't change the array or any task. Please cover frozen inputs and ordering in the
+existing Node test suite, keep the existing tests green, and don't add packages.
+
+This is a small local software change. No deployment or outside service is needed.
