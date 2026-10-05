@@ -1,0 +1,9 @@
+area,observation,expected_behavior
+forms,"A user enters a title with spaces around it",Trim the title and append one task
+search,"Search SHIP while selecting ready",Show only the ready launch-checklist task
+empty_state,"Search a title that does not exist",Show No matching tasks
+persistence,"Reload after adding a task",The added task remains
+security,"A task title contains HTML-looking text",Display literal text without executing it
+server,"Someone requests repository paths or encoded traversal",Return 404 without serving those files
+recovery,"The saved browser data is invalid",Show a notice and restore valid demo tasks
+scope,"Travel-shopping notes are also present",Do not add a shopping or vacation feature
