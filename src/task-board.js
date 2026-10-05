@@ -25,6 +25,19 @@ export function summarizeTasks(tasks) {
   return summary;
 }
 
+export function groupTasksByStatus(tasks) {
+  // Reuse the board's ID and status validation without changing existing APIs.
+  summarizeTasks(tasks);
+  const groups = { ready: [], in_progress: [], blocked: [], completed: [] };
+  for (const task of tasks) {
+    if (typeof task !== "object" || Array.isArray(task)) {
+      throw new TypeError("Each task must be an object.");
+    }
+    groups[task.status].push(task);
+  }
+  return groups;
+}
+
 export function selectNextTask(tasks) {
   // Validate the entire board, including tasks that cannot be selected.
   summarizeTasks(tasks);
