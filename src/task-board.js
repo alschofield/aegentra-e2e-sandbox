@@ -1,5 +1,18 @@
 const STATUSES = new Set(["ready", "in_progress", "blocked", "completed"]);
 
+export function formatTaskLabel(task) {
+  if (
+    task === null ||
+    typeof task !== "object" ||
+    typeof task.id !== "string" ||
+    typeof task.title !== "string"
+  ) {
+    throw new TypeError("Task must be an object with string id and title values.");
+  }
+
+  return `${task.id}: ${task.title}`;
+}
+
 export function summarizeTasks(tasks) {
   if (!Array.isArray(tasks)) {
     throw new TypeError("Tasks must be an array.");
