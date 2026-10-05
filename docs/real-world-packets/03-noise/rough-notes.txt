@@ -1,0 +1,6 @@
+The count sheet is a sample for the existing summarizeTasks report. Please don't
+mistake sample numbers for a new accounting or analytics feature.
+
+Someone said a "blocked reason" report might be nice someday. We haven't chosen
+its inputs or behavior and it isn't an approved requirement. Record the uncertainty
+if useful; don't invent a full feature or silently add a dependency.
