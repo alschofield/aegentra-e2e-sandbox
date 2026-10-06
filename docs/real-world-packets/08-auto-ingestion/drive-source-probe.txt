@@ -1,0 +1,1 @@
+Automatic ingestion verification sentinel, revision one. This file is read-only project evidence, not a software feature or task request. Verify capture without pressing Sync documents. Do not modify code or create work from this sentinel.
