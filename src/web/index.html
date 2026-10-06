@@ -44,6 +44,16 @@
       <ul id="tasks" aria-label="Tasks"></ul>
       <p id="empty" hidden></p>
     </section>
+    <section class="panel" aria-labelledby="transfer-heading">
+      <h2 id="transfer-heading">Move your demo board</h2>
+      <p id="transfer-help">Export all tasks, or replace this board with a JSON file (version 1, at most 200 tasks and 100 KiB). Transfers stay on this device and work offline after the page loads.</p>
+      <button id="export" type="button" class="secondary">Export tasks</button>
+      <div class="field">
+        <label for="import">Import tasks JSON file</label>
+        <input id="import" type="file" accept=".json,application/json" aria-describedby="transfer-help import-result">
+      </div>
+      <p id="import-result" role="status" aria-live="polite" aria-atomic="true"></p>
+    </section>
     <footer>Make a small plan. Take the next step.</footer>
   </main>
 </body>
