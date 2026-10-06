@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Task Board · Local demo</title>
+  <link rel="stylesheet" href="/app.css">
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="eyebrow">A little space to make progress</p>
+      <h1>Task Board</h1>
+      <p>Browser-local illustrative data only. This demo does not connect to a server database or a real task system. After loading, the board works offline in this tab.</p>
+    </header>
+    <p id="notice" role="status" aria-live="polite"></p>
+    <section class="panel" aria-labelledby="add-heading">
+      <h2 id="add-heading">Add something to do</h2>
+      <form id="add-form" novalidate>
+        <div class="field title-field">
+          <label for="task-title">Task title</label>
+          <input id="task-title" name="title" required aria-describedby="title-error" autocomplete="off">
+          <p id="title-error" class="error" role="alert"></p>
+        </div>
+        <div class="field">
+          <label for="task-status">Task status</label>
+          <select id="task-status" name="status">
+            <option value="ready">Ready</option>
+            <option value="blocked">Blocked</option>
+            <option value="completed">Completed</option>
+          </select>
+        </div>
+        <button type="submit">Add task</button>
+      </form>
+    </section>
+    <section class="panel" aria-labelledby="list-heading">
+      <div class="section-heading"><h2 id="list-heading">Your tasks</h2><button id="reset" type="button" class="secondary">Reset demo</button></div>
+      <div class="filters">
+        <div class="field title-field"><label for="search">Search tasks</label><input id="search" type="search" placeholder="Find a title…"></div>
+        <div class="field"><label for="filter">Filter status</label><select id="filter"><option value="all">All</option><option value="ready">Ready</option><option value="blocked">Blocked</option><option value="completed">Completed</option></select></div>
+      </div>
+      <p id="count" role="status" aria-live="polite"></p>
+      <ul id="tasks" aria-label="Tasks"></ul>
+      <p id="empty" hidden></p>
+    </section>
+    <footer>Make a small plan. Take the next step.</footer>
+  </main>
+</body>
+</html>
