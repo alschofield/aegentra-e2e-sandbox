@@ -1,5 +1,48 @@
 export const STORAGE_KEY = 'aegentra.task-board.demo.v1';
 export const STATUSES = ['ready', 'blocked', 'completed'];
+export const MAX_IMPORT_BYTES = 100 * 1024;
+export const MAX_IMPORT_TASKS = 200;
+
+function hasExactFields(value, fields) {
+  return value !== null && typeof value === 'object' && !Array.isArray(value) &&
+    Object.keys(value).length === fields.length &&
+    fields.every(field => Object.hasOwn(value, field));
+}
+
+export function parseTaskTransfer(text) {
+  if (typeof text !== 'string' || new TextEncoder().encode(text).byteLength > MAX_IMPORT_BYTES) {
+    throw new TypeError('The JSON file must be at most 100 KiB.');
+  }
+  let board;
+  try { board = JSON.parse(text); }
+  catch { throw new TypeError('The file is not valid JSON.'); }
+  if (!hasExactFields(board, ['schema_version', 'tasks']) || board.schema_version !== 1 ||
+      !Array.isArray(board.tasks) || board.tasks.length > MAX_IMPORT_TASKS) {
+    throw new TypeError('Expected schema_version 1 and an array of at most 200 tasks, with no extra fields.');
+  }
+  const ids = new Set();
+  return board.tasks.map(task => {
+    if (!hasExactFields(task, ['id', 'title', 'status']) ||
+        typeof task.id !== 'string' || !task.id.trim() || ids.has(task.id) ||
+        typeof task.title !== 'string' || !task.title.trim() || !STATUSES.includes(task.status)) {
+      throw new TypeError('Each task needs a unique nonempty string ID, a nonempty title and a supported status, with no extra fields.');
+    }
+    ids.add(task.id);
+    return { id: task.id, title: task.title.trim(), status: task.status };
+  });
+}
+
+export function exportTaskTransfer(tasks) {
+  return JSON.stringify({ schema_version: 1, tasks: tasks.map(({ id, title, status }) => ({ id, title, status })) });
+}
+
+// Validate completely before the single storage write. The caller updates its board only on success.
+export function importTaskTransfer(text, storage) {
+  const next = parseTaskTransfer(text);
+  if (!storage) throw new Error('Browser storage is unavailable.');
+  storage.setItem(STORAGE_KEY, JSON.stringify(next));
+  return next;
+}
 
 export function seedTasks() {
   return [
@@ -124,6 +167,43 @@ function startBoard() {
   });
   get('search').addEventListener('input', render);
   get('filter').addEventListener('change', render);
+  get('export').addEventListener('click', () => {
+    const blob = new Blob([exportTaskTransfer(tasks)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'task-board.json';
+    document.body.append(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
+  const importInput = get('import');
+  let importPending = false;
+  importInput.addEventListener('change', async () => {
+    const file = importInput.files[0];
+    if (!file || importPending) return;
+    importPending = true;
+    importInput.disabled = true;
+    const result = get('import-result');
+    result.textContent = 'Reading task file…';
+    try {
+      if (file.size > MAX_IMPORT_BYTES) throw new TypeError('The JSON file must be at most 100 KiB.');
+      const text = await file.text();
+      const next = importTaskTransfer(text, storage);
+      tasks = next;
+      get('search').value = '';
+      get('filter').value = 'all';
+      render();
+      result.textContent = `Import successful. Replaced the board with ${tasks.length} tasks and saved it in this browser.`;
+    } catch (error) {
+      result.textContent = `Import failed. Existing tasks are unchanged. ${error.message}`;
+    } finally {
+      importInput.value = '';
+      importInput.disabled = false;
+      importPending = false;
+    }
+  });
   get('reset').addEventListener('click', () => {
     tasks = seedTasks();
     get('search').value = '';
