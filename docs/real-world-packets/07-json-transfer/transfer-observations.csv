@@ -1,0 +1,10 @@
+scenario,input,expected_result
+portable_backup,Export while ready filter and SHIP search are active,The file still contains all board tasks in original order
+restore,Valid version1 JSON board,Replace existing tasks and clear filters
+empty,Valid JSON with empty tasks array,Show empty board without crashing
+duplicate,Two task objects have the same ID,Reject the whole file without changing the existing board
+invalid_version,schema_version2,Reject without changing tasks
+invalid_status,status paused,Reject without changing tasks
+oversized,More than200 tasks or more than100KiB,Reject without changing tasks
+literal_text,Title looks like HTML,Display literal text without creating executable DOM
+scope,Other browser storage contains unrelated data,Do not clear or overwrite it
